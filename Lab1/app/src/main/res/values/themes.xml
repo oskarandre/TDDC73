@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.Example1" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.KotlinCompose" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

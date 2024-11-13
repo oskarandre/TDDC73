@@ -101,7 +101,7 @@
             android:id="@+id/editText"
             android:layout_width="245dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"/>
+            android:layout_margin="16dp"/>
 
     </LinearLayout>
 
