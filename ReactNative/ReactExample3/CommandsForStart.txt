@@ -1,0 +1,11 @@
+I vs terminal
+cd ReactExample3
+Set-ExecutionPolicy Bypass -Scope Process
+npx expo start
+
+
+
+
+Kanske i cmd om inte det funkar:
+cd reactExample3
+npm run android

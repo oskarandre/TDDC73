@@ -88,7 +88,6 @@ fun TextInputs(){
         Spacer(modifier = Modifier.width(34.dp))
         TextField(value = text.value, onValueChange = { text.value = it }, modifier = Modifier.width(250.dp).height(50.dp), colors = OutlinedTextFieldDefaults.colors( unfocusedContainerColor = Color.White)
         )
-
     }
 }
 
