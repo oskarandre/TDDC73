@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   logo: {
+    marginBlockStart: 20,
+    marginRight: 10,
+    marginBottom: 10,
     width: 80,
     height: 40,
   },
