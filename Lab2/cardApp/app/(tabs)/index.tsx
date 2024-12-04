@@ -75,12 +75,11 @@ const CardPayment = () => {
         </Animated.View>
       </View>
       <View style={styles.whiteBox}>
-        {/* Card Input Form */}
         <TextInput
           style={styles.inputNumber}
           placeholder="Card Number"
           value={cardNumber}
-          onChangeText={setCardNumber}
+          onChangeText={(text) => setCardNumber(text.replace(/[^0-9]/g, ""))}
           maxLength={16}
           keyboardType="numeric"
         />
@@ -98,7 +97,7 @@ const CardPayment = () => {
             
             }
           >
-            <Picker.Item label="Month" value="" />
+            <Picker.Item label="MM" value="" />
             {Array.from({ length: 12 }, (_, i) => (
               <Picker.Item key={i} label={`${i + 1}`} value={`${i + 1}`} />
             ))}
@@ -109,7 +108,7 @@ const CardPayment = () => {
               style={[styles.picker, { flex: 1 }]}
               onValueChange={(itemValue) => setSelectedYear(itemValue)}
             >
-              <Picker.Item label="Year" value="" />
+              <Picker.Item label="YY" value="" />
               {Array.from({ length: 8 }, (_, i) => (
                 <Picker.Item key={i} label={`${2023 + i}`} value={`${2023 + i}`} />
               ))}
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     transform: [{ rotateY: "180deg" }],
   },
   whiteBox: {
-    width: "90%",
+    width: "95%",
     backgroundColor: "#fff",
     borderRadius: 20,
     padding: 20,
