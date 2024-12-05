@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { View, TextInput, Button, StyleSheet, Animated } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import CardFront from "./cardFront";
-import CardBack from "./cardBack";
+import CardFront from "../../components/cardFront";
+import CardBack from "../../components/cardBack";
 
 const CardPayment = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
