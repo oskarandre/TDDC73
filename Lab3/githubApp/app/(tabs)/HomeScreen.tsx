@@ -7,12 +7,13 @@ import {
 } from "@apollo/client";
 import TrendingRepos from "./TrendingRepos";
 import { Picker } from "@react-native-picker/picker";
+import GITHUB_API_TOKEN from "../secrets/token.json";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
   cache: new InMemoryCache(),
   headers: {
-    authorization: `Bearer `,
+    authorization: `Bearer ${GITHUB_API_TOKEN}`,
   }
 });
 

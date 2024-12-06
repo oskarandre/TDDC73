@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 15,
-    marginHorizontal: 15,
+    marginHorizontal: 30,
     borderRadius: 5,
     backgroundColor: "rgba(117, 171, 188, 0.3)",
      // Shadow for iOS
