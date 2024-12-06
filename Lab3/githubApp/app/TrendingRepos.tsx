@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,61 +8,58 @@ import {
   Dimensions,
   ActivityIndicator,
   SafeAreaView,
-  
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { Ionicons, AntDesign } from "@expo/vector-icons/";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+
 
 interface TrendingReposProps {
   lang: string;
   sortOption: string;
   dateRange: string;
 }
-const { width } = Dimensions.get("window"); // Get screen width
 
 export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingReposProps) {
   const navigation = useNavigation<any>();
 
-  const [repositories, setRepositories] = useState<any[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-
   const GET_TRENDING_REPOS = gql`
-  query GetTrendingRepos($query: String!, $after: String) {
-    search(query: $query, type: REPOSITORY, first: 10, after: $after) {
-      edges {
-        cursor
-        node {
-          ... on Repository {
-            id
-            name
-            owner {
-              login
-            }
-            stargazers {
-              totalCount
-            }
-            description
-            forks {
-              totalCount
-            }
-            primaryLanguage {
+    query GetTrendingRepos($query: String!) {
+      search(query: $query, type: REPOSITORY, first: 20) {
+        edges {
+          node {
+            ... on Repository {
+              id
               name
+              owner {
+                login
+              }
+              stargazers {
+                totalCount
+              }
+              description
+              forks {
+                totalCount
+              }
+              primaryLanguage {
+                name
+              }
+              createdAt
+              defaultBranchRef {
+                target {
+                  ... on Commit {
+                    history {
+                      totalCount
+                    }
+                  }
+                }
+              }
             }
-            createdAt
           }
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
     }
-  }
-`;
+  `;
 
   const getDateRangeQuery = (range: string) => {
     const today = new Date();
@@ -82,7 +80,6 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
         break;
       default:
         startDate.setDate(today.getDate() - 1);
-        
     }
 
     return `created:>${startDate.toISOString().split('T')[0]}`;
@@ -97,17 +94,19 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
   }, [lang, sortOption, dateRange]);
 
   if (loading) {
-    return  <SafeAreaView style={[styles.containerLoading]}>  
-    <ActivityIndicator size={100} color="#FBF2C0" />
-  </SafeAreaView>
+    return (
+      <SafeAreaView style={[styles.containerLoading]}>
+        <ActivityIndicator size={100} color="#FBF2C0" />
+      </SafeAreaView>
+    );
   }
   if (error) {
-    return <View style = {styles.errorMessage}
-    ><Text style={styles.errorText}>Error: {error.message}</Text>
-    </View>  ;
+    return (
+      <View style={styles.errorMessage}>
+        <Text style={styles.errorText}>Error: {error.message}</Text>
+      </View>
+    );
   }
-
-  console.log(data); // Log the data to see what is being returned
 
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -122,33 +121,51 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
       <Text style={{ color: "white", fontSize: 14 }}>
         {item.node.description}
       </Text>
-      <Text style={{ color: "white", fontSize: 14 }}>
+      <Text style={{ color: "white", fontSize: 14, fontStyle: "italic" }}>
       Language: {item.node.primaryLanguage?.name || "Unknown"}
     </Text>
-      <Text style={{ color: "white", fontSize: 12 }}>
-        Created on: {new Date(item.node.createdAt).toLocaleDateString()}
-      </Text>
+    
       <View style={styles.detailsContainer}>
+        
         <View style={styles.detailRow}>
           <Ionicons name="star-outline" color="white" size={14} />
           <Text style={styles.repoDetails}>
             {item.node.stargazers.totalCount}
           </Text>
         </View>
-        <View style={styles.detailRow}>
-          <AntDesign name="fork" size={14} color="white" />
-          <Text style={styles.repoDetails}>{item.node.forks.totalCount}</Text>
+
+        <View style={styles.detailRow} >
+          
+            <View style={styles.forkAndDate}>
+              <View style={styles.detailRow}>
+                <AntDesign name="fork" size={14} color="white" />
+                <Text style={styles.repoDetails}>{item.node.forks.totalCount}</Text>
+              </View>
+              
+                <Text style={{ color: "white", fontSize: 12 }}>
+                  Created on: {new Date(item.node.createdAt).toLocaleDateString()}
+                </Text>
+            </View>
+          
         </View>
       </View>
+
+      {/* <View style={{ flex: 1, alignSelf: 'flex-end'}}>
+            <Text style={{ color: "white", fontSize: 12 }}>
+              Created on: {new Date(item.node.createdAt).toLocaleDateString()}
+            </Text>
+      </View> */}
+
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList 
+      <FlatList
         data={data.search.edges}
         renderItem={renderItem}
-        keyExtractor={(item) => item.node.id} // Use a unique key
+        keyExtractor={(item) => item.node.id}
+        contentContainerStyle={{ alignItems: "center" }}
       />
     </View>
   );
@@ -164,8 +181,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(117, 171, 188, 1)",
   },
   errorText: {
-    fontSize: 15, // Increase the font size
-    color: "#000000", // Optional: Set text color
+    fontSize: 15,
+    color: "#000000",
     fontWeight: "bold",
   },
   container: {
@@ -174,28 +191,30 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   item: {
-    width: width * 0.5,
-    marginBlockEnd:15,
+    alignSelf:"center",
+    width: Dimensions.get("window").width*0.8,
+    marginBlockEnd: 15,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 15,
     marginHorizontal: 30,
     borderRadius: 5,
     backgroundColor: "rgba(117, 171, 188, 0.3)",
-     // Shadow for iOS
-     shadowColor: "#FBF2C0", // Shadow color
-     shadowOffset: { width: 0, height: 0 }, // Shadow position
-     shadowOpacity: 1, // Shadow transparency
-     shadowRadius: 5, // Shadow blur
-     // Shadow for Android
-     elevation: 10, // Elevation for Android
+    shadowColor: "#FBF2C0",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 5,
+    elevation: 10,
   },
   detailsContainer: {
+    
     alignItems: "flex-start",
     marginVertical: 5,
     marginHorizontal: 5,
+    
   },
   detailRow: {
+    
     flexDirection: "row",
     marginVertical: 3,
   },
@@ -203,5 +222,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     marginLeft: 4,
+  },
+  forkAndDate: {
+    flex: 1,
+    width: Dimensions.get("window").width*0.75,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    
   },
 });
