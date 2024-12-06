@@ -5,23 +5,25 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
-import TrendingRepos from "./TrendingRepos";
+import TrendingRepos from "../TrendingRepos";
 import { Picker } from "@react-native-picker/picker";
-import GITHUB_API_TOKEN from "../secrets/token.json";
+import { apiKey } from "../secrets/token.js";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
   cache: new InMemoryCache(),
   headers: {
-    authorization: `Bearer ${GITHUB_API_TOKEN}`,
-  }
+    authorization: `Bearer ${apiKey}`,
+  },
 });
 
+console.log(apiKey);
 export default function HomeScreen() {
-  const [value, setValue] = useState("c#");
+  const [value, setValue] = useState("all");
   const [sortOption, setSortOption] = useState("stars");
-  const [dateRange, setDateRange] = useState("daily");
+  const [dateRange, setDateRange] = useState("monthly");
   const [items, setItems] = useState([
+    { label: "All Languages", value: "all" },
     { label: "JavaScript", value: "javascript" },
     { label: "TypeScript", value: "typescript" },
     { label: "Python", value: "python" },

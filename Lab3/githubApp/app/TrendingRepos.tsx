@@ -10,7 +10,7 @@ import {
   
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons, AntDesign } from "@expo/vector-icons/";
 import { useNavigation } from "@react-navigation/native";
 
@@ -24,40 +24,44 @@ const { width } = Dimensions.get("window"); // Get screen width
 export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingReposProps) {
   const navigation = useNavigation<any>();
 
+  const [repositories, setRepositories] = useState<any[]>([]);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const GET_TRENDING_REPOS = gql`
-    query GetTrendingRepos($query: String!) {
-      search(query: $query, type: REPOSITORY, first: 10) {
-        edges {
-          node {
-            ... on Repository {
-              id
-              name
-              owner {
-                login
-              }
-              stargazers {
-               totalCount
-              }
-              description
-              forks {
-                totalCount
-              }
-              createdAt
-              defaultBranchRef {
-                target {
-                  ... on Commit {
-                    history {
-                      totalCount
-                    }
-                  }
-                }
-              }
+  query GetTrendingRepos($query: String!, $after: String) {
+    search(query: $query, type: REPOSITORY, first: 10, after: $after) {
+      edges {
+        cursor
+        node {
+          ... on Repository {
+            id
+            name
+            owner {
+              login
             }
+            stargazers {
+              totalCount
+            }
+            description
+            forks {
+              totalCount
+            }
+            primaryLanguage {
+              name
+            }
+            createdAt
           }
         }
       }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
-  `;
+  }
+`;
 
   const getDateRangeQuery = (range: string) => {
     const today = new Date();
@@ -93,12 +97,14 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
   }, [lang, sortOption, dateRange]);
 
   if (loading) {
-    return  <SafeAreaView style={[styles.containerLoading]}>
+    return  <SafeAreaView style={[styles.containerLoading]}>  
     <ActivityIndicator size={100} color="#FBF2C0" />
   </SafeAreaView>
   }
   if (error) {
-    return <Text>Error: {error.message}</Text>;
+    return <View style = {styles.errorMessage}
+    ><Text style={styles.errorText}>Error: {error.message}</Text>
+    </View>  ;
   }
 
   console.log(data); // Log the data to see what is being returned
@@ -107,7 +113,7 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
     <TouchableOpacity
       style={styles.item}
       onPress={() => {
-        navigation.navigate("Repository Details", { project: item });
+        navigation.navigate("DetailedRepoView", { project: item });
       }}
     >
       <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
@@ -116,23 +122,23 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
       <Text style={{ color: "white", fontSize: 14 }}>
         {item.node.description}
       </Text>
+      <Text style={{ color: "white", fontSize: 14 }}>
+      Language: {item.node.primaryLanguage?.name || "Unknown"}
+    </Text>
       <Text style={{ color: "white", fontSize: 12 }}>
         Created on: {new Date(item.node.createdAt).toLocaleDateString()}
       </Text>
       <View style={styles.detailsContainer}>
-
         <View style={styles.detailRow}>
           <Ionicons name="star-outline" color="white" size={14} />
           <Text style={styles.repoDetails}>
             {item.node.stargazers.totalCount}
           </Text>
         </View>
-
         <View style={styles.detailRow}>
           <AntDesign name="fork" size={14} color="white" />
           <Text style={styles.repoDetails}>{item.node.forks.totalCount}</Text>
         </View>
-
       </View>
     </TouchableOpacity>
   );
@@ -152,6 +158,15 @@ const styles = StyleSheet.create({
   containerLoading: {
     flex: 1,
     marginBlockStart: 100,
+  },
+  errorMessage: {
+    alignSelf: "flex-start",
+    backgroundColor: "rgba(117, 171, 188, 1)",
+  },
+  errorText: {
+    fontSize: 15, // Increase the font size
+    color: "#000000", // Optional: Set text color
+    fontWeight: "bold",
   },
   container: {
     flex: 1,
