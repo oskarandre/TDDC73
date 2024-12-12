@@ -6,16 +6,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-//import HomeScreen from './HomeScreen'; // Import the HomeScreen component
-import DetailedRepoView from './DetailedRepoView'; // Import the DetailedRepoView component
-import NotFoundScreen from './+not-found'; // Import the NotFoundScreen component
+//import HomeScreen from './HomeScreen'; 
+import DetailedRepoView from './DetailedRepoView'; 
+import NotFoundScreen from './+not-found'; 
 import HomeScreen from './(tabs)/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-//SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

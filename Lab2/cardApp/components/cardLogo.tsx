@@ -7,6 +7,7 @@ interface CardLogoProps {
 
 const CardLogo: React.FC<CardLogoProps> = ({ cardType }) => {
   const cardLogos: { [key: string]: any } = {
+    // importing the different card logos
     amex: require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/amex.png'),
     visa: require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/visa.png'),
     mastercard: require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/mastercard.png'),

@@ -18,6 +18,7 @@ const CardBack: React.FC<CardBackProps> = ({ cvv, cardType }) => {
         <View style={styles.cvvContainer}>
           <Text style={styles.cvv}>{'*'.repeat(cvv.length)}</Text>
         </View>
+        {/* Import logo that changes */}
         <CardLogo cardType={cardType}/>
       </ImageBackground>
     </View>

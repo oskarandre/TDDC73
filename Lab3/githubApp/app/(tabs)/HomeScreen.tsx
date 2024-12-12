@@ -51,7 +51,7 @@ export default function HomeScreen() {
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
-
+        {/* ===================NavBar ====================*/}
         <View style={styles.navBar}>
         <View style={styles.repoTitle}>
           <Text style={{ color: "white", fontSize: 25, fontWeight:"500"}}>Top Repos</Text>
@@ -59,6 +59,7 @@ export default function HomeScreen() {
 
         <StatusBar />
 
+        {/* Filter button to make menue visable */}
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => setModalVisible(true)}
@@ -69,6 +70,7 @@ export default function HomeScreen() {
           </View>
         </TouchableOpacity>
 
+        {/* Modal for filters if modalVisable is true */}
         <Modal
           animationType="fade"
           transparent={true}
@@ -129,6 +131,7 @@ export default function HomeScreen() {
           </TouchableWithoutFeedback>
         </Modal>
         </View>
+        {/* ===================Display repos ====================*/}
         <TrendingRepos lang={value} sortOption={sortOption} dateRange={dateRange} />
       </View>
     </ApolloProvider>

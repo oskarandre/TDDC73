@@ -61,6 +61,7 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
     }
   `;
 
+    // get the date range query
   const getDateRangeQuery = (range: string) => {
     const today = new Date();
     let startDate = new Date();
@@ -85,14 +86,17 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
     return `created:>${startDate.toISOString().split('T')[0]}`;
   };
 
+  //set up the query
   const { loading, error, data, refetch } = useQuery(GET_TRENDING_REPOS, {
     variables: { query: `language:${lang} sort:${sortOption}-desc ${getDateRangeQuery(dateRange)}` },
   });
 
+  //refetch the data when the language, sort option, or date range changes
   useEffect(() => {
     refetch();
   }, [lang, sortOption, dateRange]);
 
+  //loading gif
   if (loading) {
     return (
       <SafeAreaView style={[styles.containerLoading]}>
@@ -108,9 +112,11 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
     );
   }
 
+  //render the list of repos (clickable)
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={styles.item}
+      //navigate to the detailed repo view when clicked
       onPress={() => {
         navigation.navigate("DetailedRepoView", { project: item });
       }}
@@ -150,15 +156,10 @@ export default function TrendingRepos({ lang, sortOption, dateRange }: TrendingR
         </View>
       </View>
 
-      {/* <View style={{ flex: 1, alignSelf: 'flex-end'}}>
-            <Text style={{ color: "white", fontSize: 12 }}>
-              Created on: {new Date(item.node.createdAt).toLocaleDateString()}
-            </Text>
-      </View> */}
-
     </TouchableOpacity>
   );
 
+  //return the list of repos
   return (
     <View style={styles.container}>
       <FlatList

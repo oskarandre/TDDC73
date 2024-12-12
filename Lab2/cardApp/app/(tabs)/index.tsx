@@ -14,6 +14,7 @@ const CardPayment = () => {
   const [isCvvFocused, setIsCvvFocused] = useState(false);
   const spinValue = useRef(new Animated.Value(0)).current;
 
+  // set card type based on card number
   React.useEffect(() => {
     if (cardNumber.startsWith("4")) {
       setCardType("visa");
@@ -31,6 +32,7 @@ const CardPayment = () => {
     console.log(cardType);
   }, [cardNumber]);
 
+  // flips card when cvv input is focused
   const handleFocus = () => {
     setIsCvvFocused(true);
     Animated.timing(spinValue, {
@@ -40,6 +42,7 @@ const CardPayment = () => {
     }).start();
   };
 
+  // flips card back to front when cvv input is not active
   const handleBlur = () => {
     setIsCvvFocused(false);
     Animated.timing(spinValue, {
@@ -63,6 +66,7 @@ const CardPayment = () => {
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <Animated.View style={[styles.card, { transform: [{ rotateY: frontSpin }] }]}>
+          {/* Import front side of card */}
           <CardFront
             cardNumber={cardNumber}
             cardHolder={cardHolder}
@@ -71,15 +75,17 @@ const CardPayment = () => {
           />
         </Animated.View>
         <Animated.View style={[styles.card, styles.cardBack, { transform: [{ rotateY: backSpin }] }]}>
+          {/* Import back side of card */}
           <CardBack cvv={cvv} cardType={cardType} />
         </Animated.View>
       </View>
       <View style={styles.whiteBox}>
+        {/* inputs */}
         <TextInput
           style={styles.inputNumber}
           placeholder="Card Number"
           value={cardNumber}
-          onChangeText={(text) => setCardNumber(text.replace(/[^0-9]/g, ""))}
+          onChangeText={(text) => setCardNumber(text.replace(/[^0-9]/g, ""))} // only allow numbers
           maxLength={16}
           keyboardType="numeric"
         />

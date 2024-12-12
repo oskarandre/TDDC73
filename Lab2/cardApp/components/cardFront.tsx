@@ -14,6 +14,7 @@ interface CardFrontProps {
 const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpires, cardType}) => {
     const backgroundImage = require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/25.jpeg');
 
+    // format card number and different if it is amex 
     const formatCardNumber = (number: string) => {
         if (cardType === 'amex') {
           const formattedNumber = number.padEnd(15, '#').replace(/(.{4})(.{6})(.{5})/, '$1    $2    $3').trim();
@@ -34,8 +35,9 @@ const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpir
               style={styles.chip}
               resizeMode="contain"
             />
+            {/* Import card logo that changes depending on what brand */}
             <CardLogo cardType={cardType}/>
-
+            
             <Text style={styles.cardNumber}>{formatCardNumber(cardNumber)}</Text>
             <Text style={styles.cardHolder}>
                 <Text style ={styles.cardHolderLabel}>Card Holder {'\n'}</Text>
