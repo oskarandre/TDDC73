@@ -14,12 +14,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const Center(
-        child: SizedBox(
-          width: 360.0, // Width of the app
-          child: HomePage(title: 'Example 4: Flutter'),
-        ),
-      ),
+      home: HomePage(title: 'Example 4: Flutter')
+      // home: const Center(
+      //   child: SizedBox(
+      //     width: 360.0, // Width of the app
+      //     child: HomePage(title: 'Example 4: Flutter'),
+      //   ),
+      // ),
     );
   }
 }
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-                Padding(
+            Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: Image.asset(
                 'assets/circle.png',
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                     width: 100.0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[Text('Email')],
+                      children: <Widget>[Text('Email:')],
                     )),
                 Expanded(
                   child: TextField(
