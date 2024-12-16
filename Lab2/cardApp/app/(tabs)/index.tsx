@@ -20,7 +20,7 @@ const CardPayment = () => {
       setCardType("visa");
     } else if (cardNumber.startsWith("34") || cardNumber.startsWith("37")) {
       setCardType("amex");
-    } else if (cardNumber.startsWith("5") && cardNumber[1] < "6") {
+    } else if (cardNumber.startsWith("5") && cardNumber[1] < "6" && cardNumber[1] > "0") {
       setCardType("mastercard");
     } else if (cardNumber.startsWith("6011")) {
       setCardType("discover");
@@ -29,7 +29,7 @@ const CardPayment = () => {
     } else {
       setCardType("visa");
     }
-    console.log(cardType);
+    //console.log(cardType);
   }, [cardNumber]);
 
   // flips card when cvv input is focused
@@ -51,6 +51,18 @@ const CardPayment = () => {
       useNativeDriver: true,
     }).start();
   };
+
+
+  //formats input field card number depending on card type
+  const formatCardNumber = (number: string) => {
+    let inputCardNumber = number.padEnd(21, " ").replace(/(.{4})/g, "$1   ").trim();
+
+    if (cardType === "amex") {
+      inputCardNumber = number.padEnd(15, " ").replace(/(.{4})(.{6})(.{5})/, "$1   $2   $3").trim();
+    }
+    return inputCardNumber;
+  };
+
 
   const frontSpin = spinValue.interpolate({
     inputRange: [0, 1],
@@ -84,15 +96,16 @@ const CardPayment = () => {
         <TextInput
           style={styles.inputNumber}
           placeholder="Card Number"
-          value={cardNumber}
           onChangeText={(text) => setCardNumber(text.replace(/[^0-9]/g, ""))} // only allow numbers
-          maxLength={16}
+          value={formatCardNumber(cardNumber)}
+          maxLength={cardType === "amex" ? 21 : 25}
           keyboardType="numeric"
         />
         <TextInput
           style={styles.input}
           placeholder="Card Name"
           value={cardHolder}
+          maxLength={28}
           onChangeText={setCardHolder}
         />
         <View style={styles.row}>
@@ -100,7 +113,7 @@ const CardPayment = () => {
             selectedValue={selectedMonth}
             style={[styles.picker, { flex: 1 }]}
             onValueChange={(itemValue) => setSelectedMonth(itemValue)
-            
+
             }
           >
             <Picker.Item label="MM" value="" />
@@ -109,16 +122,16 @@ const CardPayment = () => {
             ))}
           </Picker>
 
-            <Picker
-              selectedValue={selectedYear}
-              style={[styles.picker, { flex: 1 }]}
-              onValueChange={(itemValue) => setSelectedYear(itemValue)}
-            >
-              <Picker.Item label="YY" value="" />
-              {Array.from({ length: 8 }, (_, i) => (
-                <Picker.Item key={i} label={`${2023 + i}`} value={`${2023 + i}`} />
-              ))}
-            </Picker>
+          <Picker
+            selectedValue={selectedYear}
+            style={[styles.picker, { flex: 1 }]}
+            onValueChange={(itemValue) => setSelectedYear(itemValue)}
+          >
+            <Picker.Item label="YY" value="" />
+            {Array.from({ length: 8 }, (_, i) => (
+              <Picker.Item key={i} label={`${2023 + i}`} value={`${2023 + i}`} />
+            ))}
+          </Picker>
 
           <TextInput
             style={[styles.input, styles.smallInput]}
@@ -132,7 +145,7 @@ const CardPayment = () => {
           />
         </View>
         <View style={styles.submitBtn}>
-          <Button title="Submit" onPress={() => {}} />
+          <Button title="Submit" onPress={() => { }} />
         </View>
       </View>
     </View>
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 300,
     height: 200,
-    zIndex : 10,
+    zIndex: 10,
     marginBottom: -70,
   },
   card: {
@@ -205,7 +218,7 @@ const styles = StyleSheet.create({
     width: "25%",
     marginEnd: 0,
   },
-  picker:{
+  picker: {
     height: 50,
     borderWidth: 1,
     borderColor: "#ccc",
@@ -213,7 +226,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 0,
     backgroundColor: "#fff",
-    
+
   },
   submitBtn: {
     width: "100%",
