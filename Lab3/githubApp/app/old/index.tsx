@@ -3,7 +3,7 @@ import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { client } from '../apolloClient'; // Import your Apollo Client setup
 import { GET_POPULAR_REPOSITORIES } from '../queries';
-import RepositoryItem from '../RepositoryItem';
+import RepositoryItem from './RepositoryItem';
 
 const App = () => {
   const { data, loading, error } = useQuery(GET_POPULAR_REPOSITORIES);

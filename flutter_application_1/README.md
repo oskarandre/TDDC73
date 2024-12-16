@@ -1,3 +1,4 @@
-# flutter_application_1
+# Lab 1: Flutter
 
-A new Flutter project.
+# Files of interest:
+lib/main.dart
