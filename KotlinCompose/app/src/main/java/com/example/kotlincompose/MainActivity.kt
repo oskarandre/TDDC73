@@ -1,6 +1,5 @@
 package com.example.kotlincompose
 
-
 import androidx.activity.enableEdgeToEdge
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,16 +20,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 
-
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top){
-                NavBar()
+            MyApp()
+        }
+    }
+}
+
+@Composable
+fun MyApp() {
+    Scaffold(
+        topBar = { NavBar() },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
                 Spacer(modifier = Modifier.height(32.dp))
                 Images()
                 Spacer(modifier = Modifier.height(48.dp))
@@ -39,54 +50,85 @@ class MainActivity : ComponentActivity() {
                 TextInputs()
             }
         }
-    }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavBar(){
-    //NavigationBar { Text("Example 2: Kotlin Compose")
+fun NavBar() {
     TopAppBar(
         title = { Text("Example 2: Kotlin Compose") },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00C853))
     )
 }
 
-
 @Composable
-fun Buttons(){
+fun Buttons() {
     Column {
-        Row { Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))) { Text("Button", fontSize = 15.sp, color = Color.Black)}
+        Row {
+            Button(
+                onClick = { /*CLick*/ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))
+            ) {
+                Text("Button", fontSize = 15.sp, color = Color.Black)
+            }
             Spacer(modifier = Modifier.width(64.dp))
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))) { Text("Button", fontSize = 15.sp, color = Color.Black)}
+            Button(
+                onClick = { /*CLick*/ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))
+            ) {
+                Text("Button", fontSize = 15.sp, color = Color.Black)
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Row { Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))) { Text("Button", fontSize = 15.sp, color = Color.Black)}
+        Row {
+            Button(
+                onClick = { /*Click*/ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))
+            ) {
+                Text("Button", fontSize = 15.sp, color = Color.Black)
+            }
             Spacer(modifier = Modifier.width(64.dp))
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))) { Text("Button", fontSize = 15.sp, color = Color.Black)}
+            Button(
+                onClick = { /*Click*/ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xDDD6D7D7))
+            ) {
+                Text("Button", fontSize = 15.sp, color = Color.Black)
+            }
         }
     }
 }
 
 @Composable
-fun Images(){
+fun Images() {
     val imageModifier = Modifier
         .size(150.dp)
     Image(
         painter = painterResource(id = R.drawable.circle),
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        modifier = imageModifier)
+        modifier = imageModifier
+    )
 }
 
 @Composable
-fun TextInputs(){
+fun TextInputs() {
     val text = remember { mutableStateOf("") }
-    Row(verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
         Text("Email:", modifier = Modifier.padding(8.dp), fontSize = 15.sp)
         Spacer(modifier = Modifier.width(34.dp))
-        TextField(value = text.value, onValueChange = { text.value = it }, modifier = Modifier.width(250.dp).height(50.dp), colors = OutlinedTextFieldDefaults.colors( unfocusedContainerColor = Color.White)
+        TextField(
+            value = text.value,
+            onValueChange = { text.value = it },
+            modifier = Modifier
+                .width(250.dp)
+                .height(50.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White
+            )
         )
     }
 }
@@ -94,5 +136,5 @@ fun TextInputs(){
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-
+    MyApp()
 }

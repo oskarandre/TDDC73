@@ -12,6 +12,7 @@ interface CardFrontProps {
 }
 
 const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpires, cardType}) => {
+    // had to do this to get the image to work
     const backgroundImage = require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/25.jpeg');
 
     // format card number and different if it is amex 
@@ -31,6 +32,7 @@ const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpir
     <View style={styles.shadowContainer}>
         <ImageBackground source={backgroundImage} style={styles.card} imageStyle={{ borderRadius: 10 }}>
             <ImageBackground
+              // had to do this to get the image to work
               source={require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/chip.png')}
               style={styles.chip}
               resizeMode="contain"
@@ -40,8 +42,8 @@ const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpir
             
             <Text style={styles.cardNumber}>{formatCardNumber(cardNumber)}</Text>
             <Text style={styles.cardHolder}>
-                <Text style ={styles.cardHolderLabel}>Card Holder {'\n'}</Text>
-                <Text style ={styles.cardHolderWrite}> {cardHolder ? cardHolder.toUpperCase() : 'FULL NAME'}</Text>
+                <Text style={styles.cardHolderLabel}>Card Holder</Text>
+                <Text style={styles.cardHolderWrite}>{'\n'}{cardHolder ? cardHolder.toUpperCase() : 'FULL NAME'}</Text>
             </Text>
 
             <Text style={styles.cardExpires}>
@@ -104,14 +106,12 @@ const styles = StyleSheet.create({
       color: '#fff',
   },
   cardHolderLabel: {
-    position: 'absolute',
-    
-    bottom: 20,
     fontSize: 12,
     color: '#fff',
   },
-  cardHolderWrite:{
-    marginLeft: -4,
+  cardHolderWrite: {
+    fontSize: 16,
+    color: '#fff',
   },
   cardExpires: {
       position: 'absolute',
