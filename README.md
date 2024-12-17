@@ -9,7 +9,8 @@ Kotlin + Compose
 
 Lab 2:
 React Native
-![cardApp](https://github.com/user-attachments/assets/9662f721-8a82-47e0-8d13-dac58530561b)
+<img src=".jpg" alt="drawing" width="200"/>
+![cardApp](https://github.com/user-attachments/assets/9662f721-8a82-47e0-8d13-dac58530561b = 150x)
 
 Lab 3:
 React Native
