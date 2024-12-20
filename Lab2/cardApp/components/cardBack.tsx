@@ -8,7 +8,7 @@ interface CardBackProps {
 }
 
 const CardBack: React.FC<CardBackProps> = ({ cvv, cardType }) => {
-  const backgroundImage = require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/25.jpeg');
+  const backgroundImage = require('../assets/images/25.jpeg');
 
   return (
     <View style={styles.shadowContainer}>

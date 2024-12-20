@@ -12,8 +12,7 @@ interface CardFrontProps {
 }
 
 const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpires, cardType}) => {
-    // had to do this to get the image to work
-    const backgroundImage = require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/25.jpeg');
+    const backgroundImage = require('../assets/images/25.jpeg');
 
     // format card number and different if it is amex 
     const formatCardNumber = (number: string) => {
@@ -32,8 +31,7 @@ const CardFront: React.FC<CardFrontProps> = ({ cardNumber, cardHolder, cardExpir
     <View style={styles.shadowContainer}>
         <ImageBackground source={backgroundImage} style={styles.card} imageStyle={{ borderRadius: 10 }}>
             <ImageBackground
-              // had to do this to get the image to work
-              source={require('C:/Users/oskar/Documents/GitHub/TDDC73/Lab2/cardApp/assets/images/chip.png')}
+              source={require('../assets/images/chip.png')}
               style={styles.chip}
               resizeMode="contain"
             />
